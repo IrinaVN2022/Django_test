@@ -1,0 +1,17 @@
+
+{% extends 'base.html' %}
+
+{% block title %}Update selected group{% endblock %}
+
+{% block content %}
+    <form method="post">
+        {% csrf_token %}
+        <table border="1">
+            {{ form.as_table }}
+        </table>
+        <br>
+        <input type="submit" value="Update">
+        <br><br>
+        <a href="{% url 'groups:list' %}"><b>Back to list</b></a>
+    </form>
+{% endblock %}

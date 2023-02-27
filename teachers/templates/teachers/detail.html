@@ -1,0 +1,17 @@
+
+{% extends 'base.html' %}
+
+{% block title %}Details of selected Teacher{% endblock %}
+
+
+{% block content %}
+    <p><b>First name:</b> {{ teacher.first_name }}</p>
+    <p><b>Last name:</b> {{ teacher.last_name }}</p>
+    <p><b>Birthday:</b> {{ teacher.birthday }}</p>
+    <p><b>Salary:</b> {{ teacher.salary }}</p>
+    <p><b>Email:</b> {{ teacher.email }}</p>
+    <br>
+    <a href="{% url 'teachers:update' teacher.pk %}"><b>Edit</b></a>
+    <br><br>
+    <a href="{% url 'teachers:list' %}"><b>Back to list</b></a>
+{% endblock %}
