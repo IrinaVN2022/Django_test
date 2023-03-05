@@ -1,5 +1,6 @@
 from django import forms
 from django.http import HttpResponse
+from django_filters import FilterSet
 
 from students.models import Student
 
@@ -49,3 +50,10 @@ class UpdateStudentForm(forms.ModelForm):
         }
 
 
+class StudentFilterForm(FilterSet):
+    class Meta:
+        model = Student
+        fields = {
+            'first_name': ['exact', 'icontains'],  # first_name = 'Alex',   first_name ILIKE '%abc%'
+            'last_name': ['exact', 'startswith']  # last_name LIKE 'ABC%'
+        }  # AND (OR)

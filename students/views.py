@@ -3,13 +3,12 @@ from django.middleware.csrf import get_token
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 
-from .forms import CreateStudentForm, UpdateStudentForm
+from .forms import CreateStudentForm, UpdateStudentForm, StudentFilterForm
 from .models import Student
 from .util import format_list_student
-#from webargs.fields import Str
-#cfrom webargs.djangoparser import use_args
+# from webargs.fields import Str
+# cfrom webargs.djangoparser import use_args
 from django.db.models import Q
-
 
 # HttpRequest
 # HttpResponse
@@ -26,7 +25,6 @@ def view_without_param(request):
 def index(request):
     return render(request, 'students/../templates/index.html')'''
 
-
 '''@use_args(
     {
         'first_name': Str(required=False),
@@ -34,15 +32,19 @@ def index(request):
     },
     location='query',
 )'''
+
+
 def get_students(request):
     students = Student.objects.all().order_by('birthday')
+    filter_form = StudentFilterForm(data=request.GET, queryset=students)
+
     # if 'first_name' in args:
     #    students = students.filter(first_name=args['first_name'])
     # if 'last_name' in args:
     #    students = students.filter(last_name=args['last_name'])
 
-    #if len(args) and (args.get('first_name') or args.get('last_name')):
-        #students = students.filter(
+    # if len(args) and (args.get('first_name') or args.get('last_name')):
+    # students = students.filter(
     #        Q(first_name=args.get('first_name', '')) | Q(last_name=args.get('last_name', ''))
     #    )
     # html_form = '''
@@ -61,7 +63,11 @@ def get_students(request):
     return render(
         request=request,
         template_name='students/list.html',
-        context={'title': 'List of Students', 'students': students}
+        context={
+            # 'title': 'List of Students',
+            # 'students': students,
+            'filter_form': filter_form
+        }
     )
 
 
@@ -107,7 +113,3 @@ def delete_student(request, pk):
         return HttpResponseRedirect(reverse('students:list'))
 
     return render(request, 'students/delete.html', {'student': st})
-
-
-
-
