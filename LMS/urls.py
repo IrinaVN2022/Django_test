@@ -26,6 +26,7 @@ from core.views import index
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('__debug__/', include('debug_toolbar.urls')),
     path('', index, name='home'),
     path('students/', include('students.urls')),
     path('teachers/', include('teachers.urls')),

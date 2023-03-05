@@ -2,6 +2,8 @@ from django.db import models
 
 from faker import Faker
 from decimal import Decimal
+import datetime
+from dateutil.relativedelta import relativedelta
 
 
 class Teacher(models.Model):
@@ -30,3 +32,6 @@ class Teacher(models.Model):
             teacher.salary = Decimal(faker.random_int(min=5000, max=20000))
             teacher.email = f'{teacher.first_name}@test.com'
             teacher.save()
+
+    def get_age(self):
+        return relativedelta(datetime.date.today(), self.birthday).years
