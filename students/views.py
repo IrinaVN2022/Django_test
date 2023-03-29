@@ -1,8 +1,10 @@
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.middleware.csrf import get_token
 from django.shortcuts import render, get_object_or_404
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
+from django.views.generic import UpdateView
 
+from core.views import CustomUpdateBaseView
 from .forms import CreateStudentForm, UpdateStudentForm, StudentFilterForm
 from .models import Student
 from .util import format_list_student
@@ -35,7 +37,7 @@ def index(request):
 
 
 def get_students(request):
-    students = Student.objects.all().order_by('birthday')
+    students = Student.objects.all().order_by('birthday').select_related('group')
     filter_form = StudentFilterForm(data=request.GET, queryset=students)
 
     # if 'first_name' in args:
@@ -104,12 +106,26 @@ def update_student(request, pk):
     return render(request, 'students/update.html', {'form': form})
 
 
+class CustomUpdateStudentView(CustomUpdateBaseView):
+    model = Student
+    form_class = UpdateStudentForm
+    success_url = 'students:list'
+    template_name = 'students/update.html'
+
+
+class UpdateStudentView(UpdateView):
+    model = Student
+    form_class = UpdateStudentForm
+    success_url = reverse_lazy('students:list')
+    template_name = 'students/update.html'
+
+
 def delete_student(request, pk):
     # st = Student.objects.get(pk=pk)
-    st = get_object_or_404(Student, pk=pk)
+    student = get_object_or_404(Student, pk=pk)
 
     if request.method == 'POST':
-        st.delete()
+        student.delete()
         return HttpResponseRedirect(reverse('students:list'))
 
-    return render(request, 'students/delete.html', {'student': st})
+    return render(request, 'students/delete.html', {'student': student})

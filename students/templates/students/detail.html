@@ -8,7 +8,7 @@
     <div class="col align-self-center">
         <div class="card" style="width: 18rem;">
             <div class="card-body">
-                <h5 class="card-title">{{ student.last_name }} {{ student.first_name_1 }}</h5>
+                <h5 class="card-title">{{ student.last_name }} {{ student.first_name }}</h5>
                 <h6 class="card-subtitle mb-2 text-muted">{{ student.email }}</h6>
                 <p class="card-text">{{ student.birthday|date:"y M Y" }} ({{ student.get_age }} year(s))</p>
                 <p class="card-text">Group: {{ student.group.title }}</p>

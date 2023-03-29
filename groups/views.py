@@ -3,8 +3,10 @@ from django.shortcuts import render
 from django.http import HttpRequest, HttpResponseRedirect
 from django.urls import reverse
 
+from students.models import Student
 from .forms import CreateGroupForm, UpdateGroupForm
 from .models import Group
+from courses.models import Course
 
 
 def get_render_list(request: HttpRequest):
@@ -30,10 +32,11 @@ def get_render_create(request: HttpRequest):
 
 def get_render_update(request: HttpRequest, pk: int):
     group = Group.objects.get(pk=pk)
+    students = {'students': Student.objects.filter(group=group)}
     if request.method == 'GET':
-        form = UpdateGroupForm(instance=group)
+        form = UpdateGroupForm(instance=group, initial=students)
     elif request.method == 'POST':
-        form = UpdateGroupForm(request.POST, instance=group)
+        form = UpdateGroupForm(data=request.POST, instance=group, initial=students)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect(reverse('groups:list'))
