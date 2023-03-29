@@ -1,15 +1,16 @@
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.middleware.csrf import get_token
 from django.shortcuts import render, get_object_or_404
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
+from django.views.generic import UpdateView
 
-from .forms import CreateStudentForm, UpdateStudentForm
+from core.views import CustomUpdateBaseView
+from .forms import CreateStudentForm, UpdateStudentForm, StudentFilterForm
 from .models import Student
 from .util import format_list_student
-#from webargs.fields import Str
-#cfrom webargs.djangoparser import use_args
+# from webargs.fields import Str
+# cfrom webargs.djangoparser import use_args
 from django.db.models import Q
-
 
 # HttpRequest
 # HttpResponse
@@ -26,7 +27,6 @@ def view_without_param(request):
 def index(request):
     return render(request, 'students/../templates/index.html')'''
 
-
 '''@use_args(
     {
         'first_name': Str(required=False),
@@ -34,15 +34,19 @@ def index(request):
     },
     location='query',
 )'''
+
+
 def get_students(request):
-    students = Student.objects.all().order_by('birthday')
+    students = Student.objects.all().order_by('birthday').select_related('group')
+    filter_form = StudentFilterForm(data=request.GET, queryset=students)
+
     # if 'first_name' in args:
     #    students = students.filter(first_name=args['first_name'])
     # if 'last_name' in args:
     #    students = students.filter(last_name=args['last_name'])
 
-    #if len(args) and (args.get('first_name') or args.get('last_name')):
-        #students = students.filter(
+    # if len(args) and (args.get('first_name') or args.get('last_name')):
+    # students = students.filter(
     #        Q(first_name=args.get('first_name', '')) | Q(last_name=args.get('last_name', ''))
     #    )
     # html_form = '''
@@ -61,7 +65,11 @@ def get_students(request):
     return render(
         request=request,
         template_name='students/list.html',
-        context={'title': 'List of Students', 'students': students}
+        context={
+            # 'title': 'List of Students',
+            # 'students': students,
+            'filter_form': filter_form
+        }
     )
 
 
@@ -98,16 +106,26 @@ def update_student(request, pk):
     return render(request, 'students/update.html', {'form': form})
 
 
+class CustomUpdateStudentView(CustomUpdateBaseView):
+    model = Student
+    form_class = UpdateStudentForm
+    success_url = 'students:list'
+    template_name = 'students/update.html'
+
+
+class UpdateStudentView(UpdateView):
+    model = Student
+    form_class = UpdateStudentForm
+    success_url = reverse_lazy('students:list')
+    template_name = 'students/update.html'
+
+
 def delete_student(request, pk):
     # st = Student.objects.get(pk=pk)
-    st = get_object_or_404(Student, pk=pk)
+    student = get_object_or_404(Student, pk=pk)
 
     if request.method == 'POST':
-        st.delete()
+        student.delete()
         return HttpResponseRedirect(reverse('students:list'))
 
-    return render(request, 'students/delete.html', {'student': st})
-
-
-
-
+    return render(request, 'students/delete.html', {'student': student})

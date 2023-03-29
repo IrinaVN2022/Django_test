@@ -2,7 +2,7 @@
 
 {% load crispy_forms_filters %}
 
-{% block title %}Delete selected Group{% endblock %}
+{% block title %}Create new course{% endblock %}
 
 {% block content %}
     <div class="row">
@@ -10,10 +10,10 @@
         <div class="col">
             <form method="post">
                 {% csrf_token %}
+                {{ form|crispy }}
                 <div class="text-center">
-                    <p>Do you really want to delete group <strong>{{ group.title }}</strong>?</p>
-                    <input class="btn btn-outline-primary" type="submit" value="Agree">
-                    <a class="btn btn-outline-primary" href="{% url 'groups:list' %}">Back to list</a>
+                    <input class="btn btn-outline-primary" type="submit" value="Create">
+                    <a class="btn btn-outline-primary" href="{% url 'courses:list' %}">Back to list</a>
                 </div>
             </form>
         </div>

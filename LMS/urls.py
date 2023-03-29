@@ -26,6 +26,7 @@ from core.views import index
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('__debug__/', include('debug_toolbar.urls')),
     path('', index, name='home'),
     path('students/', include('students.urls')),
     path('teachers/', include('teachers.urls')),
@@ -34,6 +35,7 @@ urlpatterns = [
     # path('teachers/update/<int:pk>/', get_render_update),
     # path('teachers/detail/<int:pk>/', get_render_detail),
     path('groups/', include('groups.urls')),
+    path('courses/', include('courses.urls')),
 
 
 ]

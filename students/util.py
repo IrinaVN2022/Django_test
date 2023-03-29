@@ -15,15 +15,15 @@ def format_list_student(students):
              '</tr>' \
              '<thead>' \
              '<tbody>'
-    for st in students:
+    for student in students:
         string += f'<tr>' \
-                  f'<td>{st.first_name}</td>' \
-                  f'<td>{st.last_name}</td>' \
-                  f'<td>{st.email}</td>' \
-                  f'<td>{st.birthday}</td>' \
-                  f'<td>{st.city if st.city else ""}</td>' \
-                  f'<td><a href="/students/update/{st.pk}/">Edit</a></td>' \
-                  f'<td>{st.phone}</td>'\
+                  f'<td>{student.first_name}</td>' \
+                  f'<td>{student.last_name}</td>' \
+                  f'<td>{student.email}</td>' \
+                  f'<td>{student.birthday}</td>' \
+                  f'<td>{student.city if student.city else ""}</td>' \
+                  f'<td><a href="/students/update/{student.pk}/">Edit</a></td>' \
+                  f'<td>{student.phone}</td>'\
                   f'</tr>'
     string += '</tbody></table>'
     return string
