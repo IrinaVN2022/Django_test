@@ -1,17 +1,12 @@
-from django.contrib import admin
-from django.urls import path, re_path, include
 
-from groups.views import get_render_list
-from groups.views import get_render_create
-from groups.views import get_render_update
-from groups.views import get_render_detail
-from groups.views import get_render_delete
+from django.urls import path
+from groups.views import ListGroupView, CreateGroupView, UpdateGroupView, DetailGroupView, DeleteGroupView
 app_name = 'groups'
 
 urlpatterns = [
-    path('', get_render_list, name='list'),
-    path('create/', get_render_create, name='create'),
-    path('update/<int:pk>/', get_render_update, name='update'),
-    path('detail/<int:pk>/', get_render_detail, name='detail'),
-    path('delete/<int:pk>/', get_render_delete, name='delete'),
+    path('', ListGroupView.as_view(), name='list'),
+    path('create/', CreateGroupView.as_view(), name='create'),
+    path('update/<int:pk>/', UpdateGroupView.as_view(), name='update'),
+    path('detail/<int:pk>/', DetailGroupView.as_view(), name='detail'),
+    path('delete/<int:pk>/', DeleteGroupView.as_view(), name='delete'),
     ]
