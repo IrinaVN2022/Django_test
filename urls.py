@@ -5,6 +5,8 @@ from .views import get_render_create
 from .views import get_render_update
 from .views import get_render_detail
 from .views import get_render_delete
+
+
 app_name = 'teachers'
 
 urlpatterns = [

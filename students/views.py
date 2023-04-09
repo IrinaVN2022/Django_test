@@ -2,7 +2,7 @@ from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.middleware.csrf import get_token
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse, reverse_lazy
-from django.views.generic import UpdateView
+from django.views.generic import UpdateView, ListView
 
 from core.views import CustomUpdateBaseView
 from .forms import CreateStudentForm, UpdateStudentForm, StudentFilterForm
@@ -25,18 +25,18 @@ def view_without_param(request):
 
 
 def index(request):
-    return render(request, 'students/../templates/index.html')'''
+    return render(request, 'students/../templates/index.html')
 
-'''@use_args(
+    @use_args(
     {
         'first_name': Str(required=False),
         'last_name': Str(required=False),
     },
     location='query',
-)'''
+)
 
 
-def get_students(request):
+    def get_students(request):
     students = Student.objects.all().order_by('birthday').select_related('group')
     filter_form = StudentFilterForm(data=request.GET, queryset=students)
 
@@ -49,7 +49,7 @@ def get_students(request):
     # students = students.filter(
     #        Q(first_name=args.get('first_name', '')) | Q(last_name=args.get('last_name', ''))
     #    )
-    # html_form = '''
+    # html_form = 
     #       <form method="get">
     #          <label for="fname">First name:</label>
     #          <input type="text" id="fname" name="first_name"><br><br>
@@ -57,7 +57,7 @@ def get_students(request):
     #          <input type="text" id="lname" name="last_name"><br><br>
     #          <input type="submit" value="Submit"><br>
     #       </form>
-    #    '''
+    #    
     # string = html_form + format_list_student(students)
     # response = HttpResponse(string)
     # return response
@@ -70,7 +70,17 @@ def get_students(request):
             # 'students': students,
             'filter_form': filter_form
         }
-    )
+    )'''
+
+
+class ListStudentView(ListView):
+    model = Student
+    template_name = 'students/list.html'
+
+    def get_queryset(self):
+        students = Student.objects.all().order_by('birthday').select_related('group')
+        filter_form = StudentFilterForm(data=self.request.GET, queryset=students)
+        return filter_form
 
 
 def detail_student(request, pk):
@@ -91,7 +101,7 @@ def create_student_view(request):
     return render(request, 'students/create.html', {'form': form})
 
 
-def update_student(request, pk):
+'''def update_student(request, pk):
     # student = Student.objects.get(pk=pk)
     student = get_object_or_404(Student, pk=pk)
 
@@ -103,7 +113,7 @@ def update_student(request, pk):
             form.save()
             return HttpResponseRedirect(reverse('students:list'))
 
-    return render(request, 'students/update.html', {'form': form})
+    return render(request, 'students/update.html', {'form': form})'''
 
 
 class CustomUpdateStudentView(CustomUpdateBaseView):

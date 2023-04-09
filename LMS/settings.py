@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from pathlib import Path
 
+from django.urls import reverse_lazy
+
 import core.apps
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -49,6 +51,7 @@ INSTALLED_APPS = [
     'core.apps.CoreConfig',
     'teachers.apps.TeachersConfig',
     'courses.apps.CoursesConfig',
+    'accounts.apps.AccountsConfig',
 
 ]
 
@@ -104,6 +107,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'OPTIONS': {
+            'min_length': 3,
+        }
     },
     {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
@@ -148,3 +154,6 @@ INTERNAL_IPS = [
     "127.0.0.1",
     # ...
 ]
+
+LOGIN_REDIRECT_URL = reverse_lazy('students:list')
+LOGOUT_REDIRECT_URL = reverse_lazy('home')

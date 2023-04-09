@@ -36,6 +36,7 @@ urlpatterns = [
     # path('teachers/detail/<int:pk>/', get_render_detail),
     path('groups/', include('groups.urls')),
     path('courses/', include('courses.urls')),
+    path('accounts/', include('accounts.urls')),
 
 
 ]
