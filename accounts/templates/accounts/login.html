@@ -11,7 +11,8 @@ Sing In
             <form method="post">
                 {% csrf_token %}
                 {{ form|crispy }}
-                <div class="text-center">
+                <a href="{% url 'password_reset' %}">If you forgot your password, click here.</a>
+                <div class="text-center pt-3">
                     <input class="btn btn-outline-primary" type="submit" value="SingIn">
                     <a class="btn btn-outline-primary" href="{% url 'accounts:register' %}">SingUp</a>
                 </div>

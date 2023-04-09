@@ -1,10 +1,10 @@
-
 from students.models import Student
 from .forms import CreateGroupForm, UpdateGroupForm
 from .models import Group
 from courses.models import Course
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DetailView, DeleteView
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 class ListGroupView(ListView):
@@ -26,7 +26,7 @@ class ListGroupView(ListView):
                   context={'form': form})'''
 
 
-class CreateGroupView(CreateView):
+class CreateGroupView(LoginRequiredMixin, CreateView):
     model = Group
     form_class = CreateGroupForm
     success_url = reverse_lazy('groups:list')
@@ -61,7 +61,7 @@ class CreateGroupView(CreateView):
                   context={'form': form})'''
 
 
-class UpdateGroupView(UpdateView):
+class UpdateGroupView(LoginRequiredMixin, UpdateView):
     model = Group
     form_class = UpdateGroupForm
     success_url = reverse_lazy('groups:list')
@@ -105,7 +105,7 @@ class UpdateGroupView(UpdateView):
                   context={'group': group})'''
 
 
-class DetailGroupView(DetailView):
+class DetailGroupView(LoginRequiredMixin, DetailView):
     model = Group
     template_name = 'groups/detail.html'
 
@@ -121,7 +121,7 @@ class DetailGroupView(DetailView):
                   context={'group': group})'''
 
 
-class DeleteGroupView(DeleteView):
+class DeleteGroupView(LoginRequiredMixin, DeleteView):
     model = Group
     template_name = 'groups/delete.html'
     success_url = reverse_lazy('groups:list')
