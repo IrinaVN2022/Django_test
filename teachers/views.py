@@ -9,6 +9,7 @@ from .forms import CreateTeacherForm
 from .forms import UpdateTeacherForm
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DetailView, DeleteView
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 '''def get_render_list(request: HttpRequest):
     teachers = Teacher.objects.all().order_by('first_name')
@@ -36,7 +37,7 @@ class TeacherListView(ListView):
                   context={'form': form})'''
 
 
-class TeacherCreateView(CreateView):
+class TeacherCreateView(LoginRequiredMixin, CreateView):
     model = Teacher
     form_class = CreateTeacherForm
     template_name = 'teachers/create.html'
@@ -58,7 +59,7 @@ class TeacherCreateView(CreateView):
                   context={'form': form})'''
 
 
-class TeacherUpdateView(UpdateView):
+class TeacherUpdateView(LoginRequiredMixin, UpdateView):
     model = Teacher
     form_class = UpdateTeacherForm
     template_name = 'teachers/create.html'
@@ -72,7 +73,7 @@ class TeacherUpdateView(UpdateView):
                   context={'teacher': teacher})'''
 
 
-class TeacherDetailView(DetailView):
+class TeacherDetailView(LoginRequiredMixin, DetailView):
     model = Teacher
     template_name = 'teachers/detail.html'
 
@@ -87,7 +88,7 @@ class TeacherDetailView(DetailView):
                   context={'teacher': teacher})'''
 
 
-class TeacherDeleteView(DeleteView):
+class TeacherDeleteView(LoginRequiredMixin, DeleteView):
     model = Teacher
     template_name = 'teachers/delete.html'
     success_url = reverse_lazy('teachers:list')
